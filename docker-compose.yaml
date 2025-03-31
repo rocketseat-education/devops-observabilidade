@@ -16,6 +16,13 @@ services:
     volumes:
       - ./config/tempo/tempo.yaml:/etc/tempo.yaml
     command: ["-config.file=/etc/tempo.yaml"]
+
+  promtail:
+    image: grafana/promtail:latest
+    container_name: promtail
+    volumes:
+      - /var/log:/var/log
+    command: ["-config.file=/etc/promtail/config.yaml"]
   
   grafana:
     image: grafana/grafana:latest
