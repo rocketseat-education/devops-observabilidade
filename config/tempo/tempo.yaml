@@ -15,6 +15,17 @@ compactor:
   compaction:
     block_retention: 30m
 
+metrics_generator:
+  registry:
+    external_labels:
+      source: tempo
+      cluster: docker-compose
+  storage:
+    path: /tmp/tempo/generator/wal
+    remote_write:
+      - url: http://mimir:9090/api/v1/push
+        send_exemplars: true
+
 storage:
   trace:
     backend: local
@@ -23,4 +34,5 @@ storage:
     local:
       path: /tmp/tempo/blocks
 
-# overrides:
+overrides:
+  metrics_generator_processors: [service_graphs, span_metrics]

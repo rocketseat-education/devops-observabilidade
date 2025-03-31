@@ -17,12 +17,15 @@ services:
       - ./config/tempo/tempo.yaml:/etc/tempo.yaml
     command: ["-config.file=/etc/tempo.yaml"]
 
-  promtail:
-    image: grafana/promtail:latest
-    container_name: promtail
+  mimir:
+    image: grafana/mimir:latest
+    container_name: mimir
+    restart: always
+    ports:
+      - "9090:9090"
+    command: ["-config.file=/etc/mimir.yaml"]
     volumes:
-      - /var/log:/var/log
-    command: ["-config.file=/etc/promtail/config.yaml"]
+      - ./config/mimir/mimir.yaml:/etc/mimir.yaml
   
   grafana:
     image: grafana/grafana:latest
@@ -40,3 +43,10 @@ services:
     depends_on:
       - loki
       - tempo
+
+  promtail:
+    image: grafana/promtail:latest
+    container_name: promtail
+    volumes:
+      - /var/log:/var/log
+    command: ["-config.file=/etc/promtail/config.yaml"]
