@@ -1,0 +1,46 @@
+receiver:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'otel-collector'
+          static_configs:
+            - targets: ['localhost:8888']
+
+processors:
+  batch:
+  resource:
+    attributes:
+      - action: insert
+        key: loki.resource, labels
+        value: service.name, service.environment
+
+exporters:
+  otlphttp/loki:
+    endpoint: http://loki:3100/otlp/v1/logs
+    tls:
+      insecure: true
+  otlp/tempo:
+    endpoint: tempo:3200
+    tls:
+      insecure: true
+  otlphttp/metrics:
+    endpoint: http://mimir:9009/otlp/v1/metrics
+    tls:
+      insecure: true
+  prometheusremotewrite:
+    endpoint: http://mimir:9090/otlp/v1/push
+    tls:
+      insecure: true
+
+extensions:
+  health_check:
+  pprof:
+  zpages:
+
+service:

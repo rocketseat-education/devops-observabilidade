@@ -43,6 +43,24 @@ services:
     depends_on:
       - loki
       - tempo
+      - mimir
+  
+  otel:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: otel
+    restart: always
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "8888:8888"
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ./config/otel/otel.yaml:/etc/otelcol/config.yaml
+    depends_on:
+      - loki
+      - tempo
+      - mimir
+      - grafana
 
   promtail:
     image: grafana/promtail:latest
