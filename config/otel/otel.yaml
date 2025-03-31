@@ -1,4 +1,4 @@
-receiver:
+receivers:
   otlp:
     protocols:
       grpc:
@@ -26,7 +26,7 @@ exporters:
     tls:
       insecure: true
   otlp/tempo:
-    endpoint: tempo:3200
+    endpoint: tempo:4317
     tls:
       insecure: true
   otlphttp/metrics:
@@ -44,3 +44,17 @@ extensions:
   zpages:
 
 service:
+  extensions: [health_check, pprof, zpages]
+  pipelines:
+    logs:
+      receivers: [otlp]
+      processors: [resource, batch]
+      exporters: [otlphttp/loki]
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp/tempo]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheusremotewrite]
