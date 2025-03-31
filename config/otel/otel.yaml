@@ -25,7 +25,7 @@ exporters:
     endpoint: http://loki:3100/otlp/v1/logs
     tls:
       insecure: true
-  otlp/tempo:
+  otlp/traces:
     endpoint: tempo:4317
     tls:
       insecure: true
@@ -53,7 +53,7 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp/tempo]
+      exporters: [otlp/traces]
     metrics:
       receivers: [otlp]
       processors: [batch]
