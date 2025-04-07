@@ -13,6 +13,6 @@ async function bootstrap() {
     })
     .catch(() => {
       log.error('Aplicação não subiu!');
-  });
+    });
 }
 bootstrap();
