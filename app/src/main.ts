@@ -1,6 +1,6 @@
 import sdk from './tracer';
 sdk.start();
-
+import { log } from './infra/logger';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
@@ -9,10 +9,10 @@ async function bootstrap() {
   await app
     .listen(3001)
     .then(() => {
-      console.log('Aplicação subiu!');
+      log.info('Aplicação subiu!');
     })
     .catch(() => {
-      console.error('Aplicação não subiu!');
+      log.error('Aplicação não subiu!');
   });
 }
 bootstrap();
