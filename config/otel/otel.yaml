@@ -18,7 +18,7 @@ processors:
     attributes:
       - action: insert
         key: loki.resource, labels
-        value: service.name, service.environment
+        value: service.name, service.environment, service.version
 
 exporters:
   otlphttp/loki:
