@@ -22,7 +22,7 @@ datasources:
   - name: Mimir
     type: prometheus
     access: proxy
-    url: http://mimir:9090/prometheus
+    url: http://mimir:9009/prometheus
     basicAuth: false
     isDefault: false
     editable: false

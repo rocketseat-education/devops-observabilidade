@@ -57,6 +57,7 @@ services:
       - GF_SECURITY_ALLOW_EMBEDDING=true
     depends_on:
       - loki
+      - prometheus
       - tempo
       - mimir
   
@@ -77,6 +78,7 @@ services:
       - ./config/otel/otel.yaml:/etc/otelcol/config.yaml
     depends_on:
       - loki
+      - prometheus
       - tempo
       - mimir
       - grafana
