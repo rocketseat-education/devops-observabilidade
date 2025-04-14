@@ -1,12 +1,8 @@
 import { NodeSDK } from '@opentelemetry/sdk-node';
-import {
-  BatchSpanProcessor,
-  ConsoleSpanExporter,
-} from '@opentelemetry/sdk-trace-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import {
+  MeterProvider,
   PeriodicExportingMetricReader,
-  ConsoleMetricExporter,
 } from '@opentelemetry/sdk-metrics';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto';
@@ -14,9 +10,12 @@ import {
   ATTR_SERVICE_NAME,
   ATTR_SERVICE_VERSION,
 } from '@opentelemetry/semantic-conventions';
-import { SimpleLogRecordProcessor } from '@opentelemetry/sdk-logs';
-import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-proto';
-import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
+import {
+  diag,
+  DiagConsoleLogger,
+  DiagLogLevel,
+  metrics,
+} from '@opentelemetry/api';
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-grpc';
 
 const SERVICE_NAME = 'app-rocketseat';
@@ -40,10 +39,16 @@ diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO);
 
 const sdk = new NodeSDK({
   traceExporter,
-  metricReader,
   instrumentations: [getNodeAutoInstrumentations()],
   resource: mergedResource,
   serviceName: SERVICE_NAME,
 });
 
-export default sdk;
+const meterProvider = new MeterProvider({
+  resource: mergedResource,
+  readers: [metricReader],
+});
+
+metrics.setGlobalMeterProvider(meterProvider);
+
+export { sdk, metrics };

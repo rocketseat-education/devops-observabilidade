@@ -1,4 +1,4 @@
-import sdk from './tracer';
+import { sdk } from './tracer';
 sdk.start();
 import { log } from './infra/logger';
 import { NestFactory } from '@nestjs/core';

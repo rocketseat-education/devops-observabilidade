@@ -9,4 +9,9 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  @Get('/metric-test')
+  metricTest(): string {
+    return this.appService.metricTest();
+  }
 }
