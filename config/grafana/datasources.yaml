@@ -28,3 +28,13 @@ datasources:
     editable: false
     version: 1
     uid: mimir
+
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    basicAuth: false
+    isDefault: false
+    editable: false
+    version: 1
+    uid: prometheus

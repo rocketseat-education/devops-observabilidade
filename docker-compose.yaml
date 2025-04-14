@@ -5,7 +5,7 @@ services:
     container_name: loki
     restart: always
     ports:
-      - "3100:3100"
+      - 3100:3100
       - 7946
       - 9095
   
@@ -14,9 +14,10 @@ services:
     container_name: tempo
     restart: always
     command: ["-config.file=/etc/tempo.yaml"]
-    ports:
-      - 4327:4317
-      - 4328:4318
+    expose:
+      - 3200
+      - 4317
+      - 4318
     volumes:
       - ./config/tempo/tempo.yaml:/etc/tempo.yaml
 
@@ -25,17 +26,28 @@ services:
     container_name: mimir
     restart: always
     ports:
-      - "9090:9090"
+      - 9008:9008
+      - 9009:9009
     command: ["-config.file=/etc/mimir.yaml"]
     volumes:
       - ./config/mimir/mimir.yaml:/etc/mimir.yaml
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: always
+    ports:
+      - 9090:9090
+    command: ['--web.enable-remote-write-receiver', '--config.file=/etc/prometheus/prometheus.yaml']
+    volumes:
+      - ./config/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
   
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
     restart: always
     ports:
-      - "3000:3000"
+      - 3000:3000
     volumes:
       - ./config/grafana/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
     environment:
@@ -53,9 +65,13 @@ services:
     container_name: otel
     restart: always
     ports:
-      - "4317:4317"
-      - "4318:4318"
-      - "8888:8888"
+      - 4317:4317 #grpc
+      - 4318:4318 #http
+      - 8888:8888 #prometheus-collector
+      - 8889:8889 #prometheus-exporter
+      - 1888:1888 #pprof
+      - 13133:13133 #helthcheck
+      - 55679:55679 #zpages
     command: ["--config=/etc/otelcol/config.yaml"]
     volumes:
       - ./config/otel/otel.yaml:/etc/otelcol/config.yaml
