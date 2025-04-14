@@ -13,6 +13,8 @@ export class AppService {
     const metric = metrics.getMeter('app-rocketseat');
     const errorMetric = metric.createCounter('hello_error');
     errorMetric.add(1);
+    const histogram = metric.createHistogram('request_duration');
+    histogram.record(1000);
     return 'Métrica adicionada!';
   }
 }
