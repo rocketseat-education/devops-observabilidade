@@ -4,6 +4,11 @@ services:
     image: grafana/loki:latest
     container_name: loki
     restart: always
+    command: [ '-config.file/etc/loki/loki.yaml', '-config.expand-env=true' ]
+    volumes:
+      - ./config/loki/loki.yaml:/etc/loki/loki.yaml
+    depends_on:
+      - minio
     ports:
       - 3100:3100
       - 7946

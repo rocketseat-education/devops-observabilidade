@@ -1,0 +1,49 @@
+auth_enabled: false
+
+server:
+  http_listen_address: 0.0.0.0
+  http_listen_port: 3100
+
+memberlist:
+  join_members: ["loki"]
+  dead_node_reclaim_time: 30s
+  gosssip_to_dead_nodes_time: 15s
+  left_ingester_timeout: 10s
+  bind_addr: ['0.0.0.0']
+  bind_port: 7946
+  advertise_addr: 127.0.0.1
+  gossip_interval: 2s
+
+schema_config:
+  configs:
+    - from: 2025-01-01
+      store: tsdb
+      object_store: ''
+      schema: v13
+      index:
+        prefix: index_
+        period: 24h
+
+limits_config:
+  discover_log_levels: false
+
+common:
+  path_prefix: /loki
+  replication_factor: 1
+  compactor_address: http://loki:3100
+  storage:
+    s3:
+      endpoint: minio:9000
+      insecure: false
+      bucketnames: loki-data
+      access_key_id: loki
+      secret_access_key: ++loki++
+      s3forcepathstyle: true
+  ring:
+    kvstore:
+      store: memberlist
+
+ruler:
+  storage:
+    s3:
+      bucketnames: loki-ruler
