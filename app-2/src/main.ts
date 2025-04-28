@@ -7,12 +7,12 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app
-    .listen(3001)
+    .listen(3002)
     .then(() => {
-      log.info('Aplicação 1 subiu!');
+      log.info('Aplicação 2 subiu!');
     })
     .catch(() => {
-      log.error('Aplicação 1 não subiu!');
+      log.error('Aplicação 2 não subiu!');
     });
 }
 bootstrap();
