@@ -8,6 +8,18 @@ services:
       - 3100:3100
       - 7946
       - 9095
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    restart: always
+    environment:
+      - MINIO_ROOT_USER=loki
+      - MINIO_ROOT_PASSWORD=**loki**
+    command: server ~ --address ':9000' --console-address ':9001'
+    ports:
+      - 9000:9000
+      - 9001:9001
   
   tempo:
     image: grafana/tempo:latest
