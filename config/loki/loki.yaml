@@ -25,7 +25,7 @@ schema_config:
         period: 24h
 
 limits_config:
-  discover_log_levels: false
+  discover_log_levels: true
 
 common:
   path_prefix: /loki
@@ -34,7 +34,7 @@ common:
   storage:
     s3:
       endpoint: minio:9000
-      insecure: false
+      insecure: true
       bucketnames: loki-data
       access_key_id: loki
       secret_access_key: ++loki++
