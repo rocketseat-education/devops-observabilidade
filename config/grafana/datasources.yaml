@@ -9,6 +9,14 @@ datasources:
     editable: false
     version: 1
     uid: loki
+    jsonData:
+      derivedFields:
+        - name: 'trace_id'
+          matcherType: 'label'
+          matcherRegex: 'trace_id'
+          url: '$${__value.raw}'
+          urlDisplayLabel: 'traces'
+          datasourceUid: 'tempo'
 
   - name: Tempo
     type: tempo
@@ -18,6 +26,19 @@ datasources:
     editable: false
     version: 1
     uid: tempo
+    jsonData:
+      tracesToLogsV2:
+        spanStartTimeShift: '-1h'
+        spanEndTimeShift: '1h'
+        tags:
+          [
+            { key: 'service.name', value: 'service_name' }
+          ]
+        filterByTraceId: false
+        filterById: false
+        customQuery: true
+        query: '{$${__tags}} | trace_id="$${__span.traceId}"'
+        datasourceUid: 'loki'
 
   - name: Mimir
     type: prometheus
